@@ -95,3 +95,15 @@ async function main() {
   console.log("✅ All platforms uploaded:", `https://youtu.be/${uploadResp.data.id}`);
 }
 await main();
+{
+  "name": "soothe-scribe",
+  "version": "1.0.0",
+  "main": "scripts/generate.js",
+  "scripts": { "generate": "node scripts/generate.js" },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "openai": "^4.0.0",
+    "googleapis": "^128.0.0",
+    "facebook-nodejs-business-sdk": "^18.0.0"
+  }
+}
