@@ -2,7 +2,10 @@ github/workflows/asmr.yml
 name: Daily ASMR
 on:
   schedule:
-    - cron: "30 13 * * *"   # 7 pm IST
+    name: Daily ASMR
+on:
+  schedule:
+    - cron: "30 13 * * *"   # 7 PM IST
   workflow_dispatch:
 jobs:
   build:
