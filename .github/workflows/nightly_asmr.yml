@@ -1,0 +1,26 @@
+name: Daily ASMR
+on:
+  schedule:
+    - cron: "30 9 * * 1"    # Monday 2:30 PM IST
+    - cron: "30 9 * * 2"    # Tuesday 2:30 PM IST
+    - cron: "30 10 * * 3"   # Wednesday 3:30 PM IST
+    - cron: "30 9 * * 4"    # Thursday 2:30 PM IST
+    - cron: "30 9 * * 5"    # Friday 2:30 PM IST
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: npm ci
+      - run: node scripts/generate.js
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          YT_CLIENT_SECRET_JSON: ${{ secrets.YT_CLIENT_SECRET_JSON }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
