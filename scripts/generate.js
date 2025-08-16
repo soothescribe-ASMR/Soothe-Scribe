@@ -14,8 +14,6 @@ const oauth2Client = new google.auth.OAuth2(
 );
 oauth2Client.setCredentials({ refresh_token: process.env.YT_REFRESH_TOKEN });
 const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
-oauth2Client.setCredentials({ refresh_token: process.env.YT_REFRESH_TOKEN });
-const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
 
 async function main() {
   // 1. AI story via Gemini
