@@ -1,22 +1,10 @@
 import axios from 'axios';
 import fs from 'fs-extra';
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { google } from 'googleapis';
 import { execSync } from 'child_process';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const oauth2Client = new google.auth.OAuth2(
-  process.env.YT_CLIENT_ID,
-  process.env.YT_CLIENT_SECRET,
-  'http://localhost:3000/callback'
-);
-import axios from 'axios';
-import fs from 'fs-extra';
-import { GoogleGenerativeAI } from '@google/generative-ai';   // ← new
-import { google } from 'googleapis';
-import { execSync } from 'child_process';
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY); // ← uses Gemini key
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
 const oauth2Client = new google.auth.OAuth2(
@@ -24,6 +12,8 @@ const oauth2Client = new google.auth.OAuth2(
   process.env.YT_CLIENT_SECRET,
   'http://localhost:3000/callback'
 );
+oauth2Client.setCredentials({ refresh_token: process.env.YT_REFRESH_TOKEN });
+const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
 oauth2Client.setCredentials({ refresh_token: process.env.YT_REFRESH_TOKEN });
 const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
 
