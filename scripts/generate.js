@@ -1,4 +1,3 @@
-// Daily ASMR pipeline – uploads to YouTube, Instagram, Facebook
 import axios from 'axios';
 import fs from 'fs-extra';
 import OpenAI from 'openai';
@@ -73,30 +72,6 @@ async function main() {
     media: { body: fs.createReadStream('final.mp4') }
   });
   await youtube.thumbnails.set({ videoId: uploadResp.data.id, media: { body: fs.createReadStream('thumb.jpg') } });
-
-  // 8. Instagram & Facebook (Meta Graph API)
-  const caption = `🌙 ${title}\n\n${description}\n\n#ASMR #BedtimeStory #Relax #Sleep #SootheScribe`;
-  const accessToken = process.env.META_ACCESS_TOKEN;
-  const igUserId = process.env.IG_USER_ID;
-  const fbPageId = process.env.FB_PAGE_ID;
-
-  // Instagram
-  const igMedia = await axios.post(
-    `https://graph.facebook.com/v19.0/${igUserId}/media`,
-    { media_type: 'VIDEO', video_url: 'https://raw.githubusercontent.com/soothescribe-ASMR/Soothe-Scribe/main/final.mp4', caption },
-    { headers: { Authorization: `Bearer ${accessToken}` } }
-  );
-  await axios.post(
-    `https://graph.facebook.com/v19.0/${igUserId}/media_publish`,
-    { creation_id: igMedia.data.id },
-    { headers: { Authorization: `Bearer ${accessToken}` } }
-  );
-
-  // Facebook page
-  await axios.post(
-    `https://graph.facebook.com/v19.0/${fbPageId}/videos`,
-    { title, description, file_url: 'https://raw.githubusercontent.com/soothescribe-ASMR/Soothe-Scribe/main/final.mp4', access_token: accessToken }
-  );
 
   console.log(`✅ Uploaded: https://youtu.be/${uploadResp.data.id}`);
 }
