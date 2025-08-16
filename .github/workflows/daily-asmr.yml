@@ -2,15 +2,14 @@ name: Daily ASMR
 
 on:
   schedule:
-    # Weekdays
-    - cron: "30 10 * * 1"   # Mon 16:00 IST
-    - cron: "30 8  * * 2"   # Tue 14:00 IST
-    - cron: "30 7  * * 3"   # Wed 13:00 IST
-    - cron: "30 12 * * 4"   # Thu 18:00 IST
-    - cron: "30 9  * * 5"   # Fri 15:00 IST
-    # Weekend
-    - cron: "30 7  * * 6"   # Sat 13:30 IST
-    - cron: "30 3  * * 0"   # Sun 09:30 IST
+    # IST = UTC+5 :30
+    - cron: "30 10 * * 1"   # Mon 16:00
+    - cron: "30 8  * * 2"   # Tue 14:00
+    - cron: "30 7  * * 3"   # Wed 13:00
+    - cron: "30 12 * * 4"   # Thu 18:00
+    - cron: "30 9  * * 5"   # Fri 15:00
+    - cron: "30 7  * * 6"   # Sat 13:30
+    - cron: "30 3  * * 0"   # Sun 09:30
   workflow_dispatch:
 
 jobs:
@@ -20,11 +19,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - run: |
-  npm ci
-  npm install @google/generative-ai
+      - run: npm ci
+      - run: npm install @google/generative-ai
       - run: node scripts/generate.js
         env:
           GEMINI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
