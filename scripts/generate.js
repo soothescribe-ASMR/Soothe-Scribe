@@ -15,31 +15,70 @@ const oauth2Client = new google.auth.OAuth2(
 oauth2Client.setCredentials({ refresh_token: process.env.YT_REFRESH_TOKEN });
 const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
 
+// ---------- helpers ----------
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+// ---------- main ----------
 async function main() {
-  // 1. AI story via Gemini
-  const storyResp = await model.generateContent(
-    'Write a short, soothing ASMR bedtime story under 150 words.'
-  );
+  // 1. AI content
+  const storyResp = await model.generateContent('Write a short, soothing ASMR bedtime story under 150 words.');
   const story = storyResp.response.text().trim();
 
-  // 2. AI title via Gemini
-  const titleResp = await model.generateContent(
-    'Create a 55-character catchy ASMR YouTube title.'
-  );
+  const titleResp = await model.generateContent('Create a 55-character catchy ASMR YouTube title.');
   const title = titleResp.response.text().trim();
 
-  // 3. AI description
-  const descResp = await model.generateContent(
-    'Write a 200-character YouTube description for an ASMR bedtime story.'
-  );
+  const descResp = await model.generateContent('Write a 200-character YouTube description for an ASMR bedtime story.');
   const description = descResp.response.text().trim();
 
-  // 4. Save files & continue rendering (rest of your original logic)
+  // 2. Render video (replace with your actual command)
+  execSync('node scripts/render.js', { stdio: 'inherit' });
+  const videoPath = './outputs/final.mp4';   // rendered video
+
+  // 3. YouTube upload (unlisted)
+  const media = {
+    body: fs.createReadStream(videoPath)
+  };
+  const ytRes = await youtube.videos.insert({
+    part: 'snippet,status',
+    requestBody: {
+      snippet: { title, description, tags: ['ASMR', 'bedtime', 'sleep'] },
+      status: { privacyStatus: 'unlisted' }
+    },
+    media
+  });
+  console.log('✅ YouTube uploaded:', ytRes.data.id);
+
+  // 4. Facebook Reel
+  const fbUrl = `https://graph.facebook.com/v19.0/${process.env.FB_PAGE_ID}/videos`;
+  const fbForm = new FormData();
+  fbForm.append('access_token', process.env.FACEBOOK_ACCESS_TOKEN);
+  fbForm.append('description', title + '\n\n' + description);
+  fbForm.append('source', fs.createReadStream(videoPath));
+  const fbRes = await axios.post(fbUrl, fbForm, { headers: fbForm.getHeaders() });
+  console.log('✅ Facebook Reel:', fbRes.data.id);
+
+  // 5. Instagram Reel
+  const igUploadUrl = `https://graph.facebook.com/v19.0/${process.env.IG_USER_ID}/media`;
+  const igBody = {
+    access_token: process.env.INSTAGRAM_ACCESS_TOKEN,
+    media_type: 'REELS',
+    video_url: 'https://your-cdn.com/final.mp4', // replace with actual public URL
+    caption: title + '\n\n#ASMR #SleepStory #Reels'
+  };
+  const igUpload = await axios.post(igUploadUrl, igBody);
+  const igContainerId = igUpload.data.id;
+  await sleep(10000); // wait for processing
+  await axios.post(
+    `https://graph.facebook.com/v19.0/${process.env.IG_USER_ID}/media_publish`,
+    { access_token: process.env.INSTAGRAM_ACCESS_TOKEN, creation_id: igContainerId }
+  );
+  console.log('✅ Instagram Reel published');
+
+  // 6. Save local copies if needed
+  fs.ensureDirSync('outputs');
   fs.writeFileSync('outputs/story.txt', story);
   fs.writeFileSync('outputs/title.txt', title);
   fs.writeFileSync('outputs/description.txt', description);
-
-  console.log('✅ Story, title & description ready.');
 }
 
 main().catch(console.error);
