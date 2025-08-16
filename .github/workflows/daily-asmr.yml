@@ -1,11 +1,16 @@
 name: Daily ASMR
+
 on:
   schedule:
-    - cron: "30 9 * * 1"    # Mon 14:30 IST
-    - cron: "30 9 * * 2"    # Tue 14:30 IST
-    - cron: "30 10 * * 3"   # Wed 15:30 IST
-    - cron: "30 9 * * 4"    # Thu 14:30 IST
-    - cron: "30 9 * * 5"    # Fri 14:30 IST
+    # Weekdays
+    - cron: "30 10 * * 1"   # Mon 16:00 IST
+    - cron: "30 8  * * 2"   # Tue 14:00 IST
+    - cron: "30 7  * * 3"   # Wed 13:00 IST
+    - cron: "30 12 * * 4"   # Thu 18:00 IST
+    - cron: "30 9  * * 5"   # Fri 15:00 IST
+    # Weekend
+    - cron: "30 7  * * 6"   # Sat 13:30 IST
+    - cron: "30 3  * * 0"   # Sun 09:30 IST
   workflow_dispatch:
 
 jobs:
