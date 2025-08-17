@@ -11,6 +11,7 @@ on:
     - cron: "30 7  * * 6"   # Sat 13:30
     - cron: "30 3  * * 0"   # Sun 09:30
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,3 +33,18 @@ jobs:
           BUFFER_TOKEN: ${{ secrets.BUFFER_TOKEN }}
           BUFFER_IG_ID: ${{ secrets.BUFFER_IG_ID }}
           BUFFER_FB_ID: ${{ secrets.BUFFER_FB_ID }}
+
+      - name: Upload to YouTube
+        run: node scripts/upload-youtube.js
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+
+      - name: Upload to Instagram
+        run: node scripts/upload-instagram.js
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+
+      - name: Upload to Facebook
+        run: node scripts/upload-facebook.js
+        env:
+          FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
