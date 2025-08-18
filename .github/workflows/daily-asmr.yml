@@ -34,6 +34,14 @@ jobs:
           BUFFER_IG_ID: ${{ secrets.BUFFER_IG_ID }}
           BUFFER_FB_ID: ${{ secrets.BUFFER_FB_ID }}
 
+      - name: Create real test video
+  run: |
+    mkdir -p output
+    ffmpeg -f lavfi -i testsrc=duration=5:size=1280x720:rate=30 -c:v libx264 -pix_fmt yuv420p output/final.mp4
+
+- name: Verify file exists
+  run: ls -lh output/final.mp4
+  
       - name: Upload to YouTube
         run: node scripts/upload-youtube.js
         env:
