@@ -1,13 +1,17 @@
 // scripts/upload-youtube.js
 import { google } from 'googleapis';
 import fs from 'fs';
+
 const youtube = google.youtube('v3');
 const auth = new google.auth.GoogleAuth({
-  -   keyFile: 'credentials.json',
-+   keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+  keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+  scopes: ['https://www.googleapis.com/auth/youtube.upload'],
+});
+
 const upload = async () => {
   const authClient = await auth.getClient();
   google.options({ auth: authClient });
+
   await youtube.videos.insert({
     part: 'snippet,status',
     requestBody: {
@@ -16,6 +20,8 @@ const upload = async () => {
     },
     media: { body: fs.createReadStream('output/final.mp4') },
   });
+
   console.log('✅ YouTube done');
 };
+
 upload().catch(console.error);
