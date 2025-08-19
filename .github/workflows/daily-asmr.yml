@@ -42,7 +42,7 @@ jobs:
 - name: Verify file exists
   run: ls -lh output/final.mp4
   
-      - name: Upload to YouTube
+      -       - name: Upload to YouTube
         run: node scripts/upload-youtube.js
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
