@@ -3,9 +3,8 @@ import { google } from 'googleapis';
 import fs from 'fs';
 const youtube = google.youtube('v3');
 const auth = new google.auth.GoogleAuth({
-  keyFile: 'credentials.json',
-  scopes: ['https://www.googleapis.com/auth/youtube.upload'],
-});
+  -   keyFile: 'credentials.json',
++   keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
 const upload = async () => {
   const authClient = await auth.getClient();
   google.options({ auth: authClient });
