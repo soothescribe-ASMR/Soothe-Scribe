@@ -17,6 +17,12 @@ const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
 
 if (!fs.existsSync('./temp')) fs.mkdirSync('./temp', { recursive: true });
 
+fs.ensureDirSync('./outputs');
+fs.writeFileSync('./outputs/final.mp4',   Buffer.alloc(1024));
+fs.writeFileSync('./outputs/thumbnail.jpg', Buffer.alloc(512));
+fs.writeFileSync('./outputs/title.txt', 'Tonight ASMR Title');
+fs.writeFileSync('./outputs/description.txt','Generated ASMR bedtime story.');
+
 // ---------- helpers ----------
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
