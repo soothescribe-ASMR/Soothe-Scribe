@@ -1,5 +1,4 @@
 name: Daily ASMR
-
 on:
   schedule:
     # IST = UTC+5:30
