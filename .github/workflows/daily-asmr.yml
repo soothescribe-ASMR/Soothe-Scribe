@@ -1,3 +1,4 @@
+# .github/workflows/daily-asmr.yml
 name: Daily ASMR
 
 permissions:
@@ -5,53 +6,36 @@ permissions:
 
 on:
   schedule:
-    - cron: "30 10 * * 1"
-    - cron: "30 8  * * 2"
-    - cron: "30 7  * * 3"
-    - cron: "30 12 * * 4"
-    - cron: "30 9  * * 5"
-    - cron: "30 7  * * 6"
-    - cron: "30 3  * * 0"
+    # IST = UTC+5:30
+    - cron: "30 10 * * 1"   # Mon 16:00
+    - cron: "30 8  * * 2"   # Tue 14:00
+    - cron: "30 7  * * 3"   # Wed 13:00
+    - cron: "30 12 * * 4"   # Thu 18:00
+    - cron: "30 9  * * 5"   # Fri 15:00
+    - cron: "30 7  * * 6"   # Sat 13:30
+    - cron: "30 3  * * 0"   # Sun 09:30
   workflow_dispatch:
 
 jobs:
   daily-asmr:
     runs-on: ubuntu-latest
     steps:
-      ...
       - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install deps
-        run: npm ci
-
-      - name: Generate ASMR
-        run: node scripts/generate.js
-
-      - name: Upload video to Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - run: node scripts/generate.js
+      - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./temp
-
-      - name: Upload to YouTube
-        run: node scripts/upload-youtube.js
-
-      - name: Upload to Instagram
-        run: node scripts/upload-instagram.js
-
-      - name: Upload to Facebook
-        run: node scripts/upload-facebook.js
-
-        - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+          publish_dir: ./outputs
+      - run: node scripts/upload-youtube.js
+      - run: node scripts/upload-instagram.js
+      - run: node scripts/upload-facebook.js
+      - uses: actions/upload-artifact@v4
         with:
           name: asmr-output
-          path: ./outputs 
+          path: ./outputs
           path: |
              fs.ensureDirSync('./outputs');
   fs.writeFileSync('./outputs/final.mp4', Buffer.alloc(1024));   // dummy video
