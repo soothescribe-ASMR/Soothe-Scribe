@@ -15,6 +15,8 @@ const oauth2Client = new google.auth.OAuth2(
 oauth2Client.setCredentials({ refresh_token: process.env.YT_REFRESH_TOKEN });
 const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
 
+if (!fs.existsSync('./temp')) fs.mkdirSync('./temp', { recursive: true });
+
 // ---------- helpers ----------
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -82,3 +84,4 @@ async function main() {
 }
 
 main().catch(console.error);
+
