@@ -5,21 +5,20 @@ permissions:
 
 on:
   schedule:
-    # IST = UTC+5:30
-    - cron: "30 10 * * 1"   # Mon 16:00
-    - cron: "30 8  * * 2"   # Tue 14:00
-    - cron: "30 7  * * 3"   # Wed 13:00
-    - cron: "30 12 * * 4"   # Thu 18:00
-    - cron: "30 9  * * 5"   # Fri 15:00
-    - cron: "30 7  * * 6"   # Sat 13:30
-    - cron: "30 3  * * 0"   # Sun 09:30
+    - cron: "30 10 * * 1"
+    - cron: "30 8  * * 2"
+    - cron: "30 7  * * 3"
+    - cron: "30 12 * * 4"
+    - cron: "30 9  * * 5"
+    - cron: "30 7  * * 6"
+    - cron: "30 3  * * 0"
   workflow_dispatch:
 
 jobs:
--  build:
-+  daily-asmr:
+  daily-asmr:
     runs-on: ubuntu-latest
     steps:
+      ...
       - uses: actions/checkout@v4
 
       - name: Setup Node
