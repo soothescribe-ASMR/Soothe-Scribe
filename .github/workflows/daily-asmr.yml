@@ -1,7 +1,7 @@
 name: Daily ASMR
 on:
   schedule:
-    # IST = UTC+5:30
+   # IST = UTC+5:30
     - cron: "30 10 * * 1"   # Mon 16:00
     - cron: "30 8  * * 2"   # Tue 14:00
     - cron: "30 7  * * 3"   # Wed 13:00
