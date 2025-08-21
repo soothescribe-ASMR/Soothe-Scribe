@@ -52,8 +52,7 @@ jobs:
         with:
           name: asmr-output
           path: |
-             fs.ensureDirSync('./outputs');
-  fs.writeFileSync('./outputs/final.mp4', Buffer.alloc(1024));   // dummy video
-  fs.writeFileSync('./outputs/thumbnail.jpg', Buffer.alloc(512)); // dummy thumb
-  fs.writeFileSync('./outputs/title.txt', 'Tonight ASMR Title');
-  fs.writeFileSync('./outputs/description.txt', 'Generated ASMR bedtime story.');
+             outputs/final.mp4
+            outputs/thumbnail.jpg
+            outputs/title.txt
+            outputs/description.txt
