@@ -52,7 +52,7 @@ jobs:
         with:
           name: asmr-output
           path: |
-            temp/final.mp4
-            temp/thumbnail.jpg
-            temp/title.txt
-            temp/description.txt
+            outputs/final.mp4
+            outputs/thumbnail.jpg
+            outputs/title.txt
+            outputs/description.txt
