@@ -1,5 +1,8 @@
 name: Daily ASMR
 
+permissions:
+  contents: write
+
 on:
   schedule:
     # IST = UTC+5:30
