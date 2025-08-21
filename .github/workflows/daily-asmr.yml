@@ -29,6 +29,12 @@ jobs:
       - name: Generate ASMR
         run: node scripts/generate.js
 
+        - name: Upload video to Pages
+  uses: peaceiris/actions-gh-pages@v4
+  with:
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+    publish_dir: ./temp
+
       - name: Upload to YouTube
         run: node scripts/upload-youtube.js
 
