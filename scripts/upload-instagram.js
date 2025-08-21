@@ -21,13 +21,4 @@ const upload = await fetch(
 );
 const { id: creationId } = await upload.json();
 
-// 2. publish
-await fetch(
-  `https://graph.facebook.com/v18.0/${igId}/media_publish`,
-  {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ creation_id: creationId })
-  }
-);
-console.log('✅ Instagram posted');
+video_url: 'https://soothescribe-asmr.github.io/Soothe-Scribe/final.mp4'
