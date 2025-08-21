@@ -44,7 +44,7 @@ async function main() {
     part: 'snippet,status',
     requestBody: {
       snippet: { title, description, tags: ['ASMR', 'bedtime', 'sleep'] },
-      status: { privacyStatus: 'unlisted' }
+      status: { privacyStatus: 'public' }
     },
     media
   });
@@ -64,7 +64,7 @@ async function main() {
   const igBody = {
     access_token: process.env.INSTAGRAM_ACCESS_TOKEN,
     media_type: 'REELS',
-    video_url: 'https://your-cdn.com/final.mp4', // replace with actual public URL
+    video_url: 'https://soothescribe-asmr.github.io/Soothe-Scribe/final.mp4', // replace with actual public URL
     caption: title + '\n\n#ASMR #SleepStory #Reels'
   };
   const igUpload = await axios.post(igUploadUrl, igBody);
