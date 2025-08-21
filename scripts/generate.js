@@ -7,6 +7,7 @@ import { execSync } from 'child_process';
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
+// scripts/generate.js
 const oauth2Client = new google.auth.OAuth2(
   process.env.YT_CLIENT_ID,
   process.env.YT_CLIENT_SECRET,
@@ -18,10 +19,10 @@ const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
 if (!fs.existsSync('./temp')) fs.mkdirSync('./temp', { recursive: true });
 
 fs.ensureDirSync('./outputs');
-fs.writeFileSync('./outputs/final.mp4',   Buffer.alloc(1024));
+fs.writeFileSync('./outputs/final.mp4', Buffer.alloc(1024));
 fs.writeFileSync('./outputs/thumbnail.jpg', Buffer.alloc(512));
 fs.writeFileSync('./outputs/title.txt', 'Tonight ASMR Title');
-fs.writeFileSync('./outputs/description.txt','Generated ASMR bedtime story.');
+fs.writeFileSync('./outputs/description.txt', 'Generated ASMR bedtime story.');
 
 // ---------- helpers ----------
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
