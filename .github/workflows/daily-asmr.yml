@@ -62,3 +62,13 @@ jobs:
         run: node scripts/upload-facebook.js
         env:
           FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
+          
+        - name: Upload generated files
+  uses: actions/upload-artifact@v4
+  with:
+    name: asmr-output
+    path: |
+      temp/final.mp4
+      temp/thumbnail.jpg
+      temp/title.txt
+      temp/description.txt
