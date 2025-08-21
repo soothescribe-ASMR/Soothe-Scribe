@@ -2,7 +2,7 @@ name: Daily ASMR
 
 on:
   schedule:
-    # IST = UTC+5 :30
+    # IST = UTC+5:30
     - cron: "30 10 * * 1"   # Mon 16:00
     - cron: "30 8  * * 2"   # Tue 14:00
     - cron: "30 7  * * 3"   # Wed 13:00
@@ -18,57 +18,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with: { node-version: 18 }
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - run: npm ci
-      - run: npm install @google/generative-ai
+      - name: Install deps
+        run: npm ci
 
-      - run: node scripts/generate.js
-        env:
-          GEMINI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
-          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
-          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
-          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-          BUFFER_TOKEN: ${{ secrets.BUFFER_TOKEN }}
-          BUFFER_IG_ID: ${{ secrets.BUFFER_IG_ID }}
-          BUFFER_FB_ID: ${{ secrets.BUFFER_FB_ID }}
-
-      - name: Create real test video
-        run: |
-          mkdir -p output
-          ffmpeg -f lavfi -i testsrc=duration=5:size=1280x720:rate=30 -c:v libx264 -pix_fmt yuv420p output/final.mp4
-
-      - name: Verify file exists
-        run: ls -lh output/final.mp4
-
-      - name: Write service-account JSON
-        run: |
-          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT }}' > service_account.json
+      - name: Generate ASMR
+        run: node scripts/generate.js
 
       - name: Upload to YouTube
         run: node scripts/upload-youtube.js
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: service_account.json
 
       - name: Upload to Instagram
         run: node scripts/upload-instagram.js
-        env:
-          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
 
       - name: Upload to Facebook
         run: node scripts/upload-facebook.js
-        env:
-          FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
-          
-        - name: Upload generated files
-  uses: actions/upload-artifact@v4
-  with:
-    name: asmr-output
-    path: |
-      temp/final.mp4
-      temp/thumbnail.jpg
-      temp/title.txt
-      temp/description.txt
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: asmr-output
+          path: |
+            temp/final.mp4
+            temp/thumbnail.jpg
+            temp/title.txt
+            temp/description.txt
