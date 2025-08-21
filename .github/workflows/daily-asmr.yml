@@ -1,7 +1,8 @@
 name: Daily ASMR
+
 on:
   schedule:
-   # IST = UTC+5:30
+    # IST = UTC+5:30
     - cron: "30 10 * * 1"   # Mon 16:00
     - cron: "30 8  * * 2"   # Tue 14:00
     - cron: "30 7  * * 3"   # Wed 13:00
@@ -28,11 +29,11 @@ jobs:
       - name: Generate ASMR
         run: node scripts/generate.js
 
-        - name: Upload video to Pages
-  uses: peaceiris/actions-gh-pages@v4
-  with:
-    github_token: ${{ secrets.GITHUB_TOKEN }}
-    publish_dir: ./temp
+      - name: Upload video to Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./temp
 
       - name: Upload to YouTube
         run: node scripts/upload-youtube.js
