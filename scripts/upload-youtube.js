@@ -6,7 +6,6 @@ const oauth2Client = new google.auth.OAuth2(
   process.env.YT_CLIENT_SECRET,
   'urn:ietf:wg:oauth:2.0:oob'
 );
-
 oauth2Client.setCredentials({
   access_token: process.env.YT_ACCESS_TOKEN,
   refresh_token: process.env.YT_REFRESH_TOKEN
@@ -21,7 +20,7 @@ const upload = async () => {
       snippet: {
         title: fs.readFileSync('./temp/title.txt', 'utf8').trim(),
         description: fs.readFileSync('./temp/description.txt', 'utf8').trim(),
-        tags: ['ASMR', 'bedtime']
+        tags: ['ASMR', 'bedtime', 'relax', 'sleep']
       },
       status: { privacyStatus: 'public' }
     },
