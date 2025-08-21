@@ -1,12 +1,9 @@
-# .github/workflows/daily-asmr.yml
 name: Daily ASMR
-
 permissions:
   contents: write
 
 on:
   schedule:
-    # IST = UTC+5:30
     - cron: "30 10 * * 1"   # Mon 16:00
     - cron: "30 8  * * 2"   # Tue 14:00
     - cron: "30 7  * * 3"   # Wed 13:00
@@ -36,9 +33,3 @@ jobs:
         with:
           name: asmr-output
           path: ./outputs
-          path: |
-             fs.ensureDirSync('./outputs');
-  fs.writeFileSync('./outputs/final.mp4', Buffer.alloc(1024));   // dummy video
-  fs.writeFileSync('./outputs/thumbnail.jpg', Buffer.alloc(512)); // dummy thumb
-  fs.writeFileSync('./outputs/title.txt', 'Tonight ASMR Title');
-  fs.writeFileSync('./outputs/description.txt', 'Generated ASMR bedtime story.');
