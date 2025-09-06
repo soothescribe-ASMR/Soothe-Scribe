@@ -19,9 +19,16 @@ const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
 if (!fs.existsSync('./temp')) fs.mkdirSync('./temp', { recursive: true });
 
 fs.ensureDirSync('./outputs');
-fs.copyFileSync('./test-assets/1sec.mp4', './outputs/final.mp4');
-fs.copyFileSync('./test-assets/thumb.jpg', './outputs/thumbnail.jpg');
-fs.writeFileSync('./outputs/title.txt', 'Tonight ASMR Title');
+// 1-second silent test video (1280×720, 30 fps)
+import { execSync } from 'child_process';
+execSync(
+  'ffmpeg -f lavfi -i testsrc=duration=1:size=1280x720:rate=30 -f lavfi -i anullsrc -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest ./outputs/final.mp4 -y',
+  { stdio: 'inherit' }
+);
+
+// tiny dummy thumbnail & text
+fs.writeFileSync('./outputs/thumbnail.jpg', Buffer.alloc(1024));
+fs.writeFileSync('./outputs/title.txt',       'Tonight ASMR Title');
 fs.writeFileSync('./outputs/description.txt', 'Generated ASMR bedtime story.');
 
 // ---------- helpers ----------
