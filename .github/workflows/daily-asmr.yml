@@ -21,21 +21,24 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - run: npm ci
-      - run: node scripts/generate.js
-      - name: Install ffmpeg
-  uses: FedericoCarboni/setup-ffmpeg@v3
-  with:
-    ffmpeg-version: release
 
-- name: Generate ASMR
-  run: npm run generate
+      - name: Install ffmpeg
+        uses: FedericoCarboni/setup-ffmpeg@v3
+        with:
+          ffmpeg-version: release
+
+      - name: Generate ASMR
+        run: npm run generate
+
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./outputs
+
       - run: node scripts/upload-youtube.js
       - run: node scripts/upload-instagram.js
       - run: node scripts/upload-facebook.js
+
       - uses: actions/upload-artifact@v4
         with:
           name: asmr-output
