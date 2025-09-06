@@ -20,7 +20,6 @@ if (!fs.existsSync('./temp')) fs.mkdirSync('./temp', { recursive: true });
 
 fs.ensureDirSync('./outputs');
 // 1-second silent test video (1280×720, 30 fps)
-import { execSync } from 'child_process';
 execSync(
   'ffmpeg -f lavfi -i testsrc=duration=1:size=1280x720:rate=30 -f lavfi -i anullsrc -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest ./outputs/final.mp4 -y',
   { stdio: 'inherit' }
