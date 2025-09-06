@@ -7,7 +7,6 @@ import { execSync } from 'child_process';
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
-// scripts/generate.js
 const oauth2Client = new google.auth.OAuth2(
   process.env.YT_CLIENT_ID,
   process.env.YT_CLIENT_SECRET,
@@ -17,24 +16,20 @@ oauth2Client.setCredentials({ refresh_token: process.env.YT_REFRESH_TOKEN });
 const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
 
 if (!fs.existsSync('./temp')) fs.mkdirSync('./temp', { recursive: true });
-
 fs.ensureDirSync('./outputs');
+
 // 1-second silent test video (1280×720, 30 fps)
 execSync(
   'ffmpeg -f lavfi -i testsrc=duration=1:size=1280x720:rate=30 -f lavfi -i anullsrc -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest ./outputs/final.mp4 -y',
   { stdio: 'inherit' }
 );
-- name: Install ffmpeg
-  uses: FedericoCarboni/setup-ffmpeg@v3
-  with:
-    ffmpeg-version: release
 
-- name: Generate ASMR
-  run: npm run generate
 // tiny dummy thumbnail & text
 fs.writeFileSync('./outputs/thumbnail.jpg', Buffer.alloc(1024));
-fs.writeFileSync('./outputs/title.txt',       'Tonight ASMR Title');
+fs.writeFileSync('./outputs/title.txt', 'Tonight ASMR Title');
 fs.writeFileSync('./outputs/description.txt', 'Generated ASMR bedtime story.');
+
+// ---------- rest of your AI + upload logic ----------
 
 // ---------- helpers ----------
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
