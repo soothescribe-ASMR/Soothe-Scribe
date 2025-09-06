@@ -24,7 +24,13 @@ execSync(
   'ffmpeg -f lavfi -i testsrc=duration=1:size=1280x720:rate=30 -f lavfi -i anullsrc -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest ./outputs/final.mp4 -y',
   { stdio: 'inherit' }
 );
+- name: Install ffmpeg
+  uses: FedericoCarboni/setup-ffmpeg@v3
+  with:
+    ffmpeg-version: release
 
+- name: Generate ASMR
+  run: npm run generate
 // tiny dummy thumbnail & text
 fs.writeFileSync('./outputs/thumbnail.jpg', Buffer.alloc(1024));
 fs.writeFileSync('./outputs/title.txt',       'Tonight ASMR Title');
